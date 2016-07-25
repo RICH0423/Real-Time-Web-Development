@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="chatApp">
+<head>
+    <meta charset="utf-8" />
+    <title>Chat-App</title>
+    <link rel="icon" type="image/png" href="assets/imgs/ok.ico">
+    <link href="assets/css/bootstrap.css" rel="stylesheet" /> 
+    <link href="assets/css/main.css" rel="stylesheet" />          
+    <script src="lib/mqttws31.min.js"></script>              
+    <script src="lib/Math.uuid.js"></script>                  
+    <script src="lib/angular.min.js"></script>    
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>          
+</head>
+
+<body ng-controller="chatAppCtrl" >
+    <h3>Chat setting</h3>
+    <div className="form-style">
+    <form>
+        <div ng-show="!vm.isConnected">
+            Mqtt Host/Port: <br />
+            <input type="text" name="mqtt_host" ng-model="vm.mqtt_host" /> 
+            <input type="text" name="mqtt_port" ng-model="vm.mqtt_port"/> <br />
+            Topic: <br />
+            <input type="text" name="topic" ng-model="vm.topic"/> <br />
+            <input type="button" value="Connect" ng-click="action.connectMqtt()" />
+        </div>
+        <br /><br />
+
+        <div ng-show="vm.isConnected">
+            <input type="button" value="Disconnect" ng-click="action.disConnectMqtt()" /> <br/><br/>
+            Message: <br />
+            <input type="text" name="message" ng-model="vm.message" /> 
+            <input type="button" value="Send" ng-click="action.sendMessage()" /> <br/><br/>
+        </div>
+    </form>
+    </div>
+
+    <br/>
+    <table class="table-bordered" ng-show="vm.messages.length">
+        <tr>
+            <th> Message: </th>
+        </tr>
+        <tr ng-repeat="obj in vm.messages">
+            <td>{{obj.message}}</td>
+        </tr>
+    </table>
+
+</body>
+</html>
