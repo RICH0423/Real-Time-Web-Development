@@ -10,3 +10,4 @@
 ---------------
 #####Homework
 - [Week1] (https://github.com/RICH0423/Real-Time-Web-Development/tree/master/e2-rtw-s01_homework)
+- [Week2] (https://github.com/RICH0423/Real-Time-Web-Development/tree/master/e2-rtw-s02_homework)
