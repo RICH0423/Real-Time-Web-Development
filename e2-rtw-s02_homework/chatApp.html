@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="chatApp">
+<head>
+    <meta charset="utf-8" />
+    <title>Chat-App</title>
+    <link rel="icon" type="image/png" href="assets/imgs/ok.ico">
+    <link href="assets/css/bootstrap.css" rel="stylesheet" /> 
+    <link href="assets/css/main.css" rel="stylesheet" />     
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet" />     
+    <script src="lib/mqttws31.min.js"></script>              
+    <script src="lib/Math.uuid.js"></script>                  
+    <script src="lib/angular.min.js"></script>      
+    <script src="lib/highcharts.js"></script>                 <!-- 產生圖表(Highchart)的函式庫 -->
+    <script src="lib/highcharts-more.js"></script>            <!-- Highchart的延伸工具函式庫 -->
+    <script src="lib/solid-gauge.js"></script>                <!-- Highchart特定圖表函式庫 -->
+    <script src="lib/highcharts-ng.min.js"></script>          <!-- Angular.js對Highchart的函式庫 -->
+    <script src="lib/moment-with-locales.min.js"></script>    <!-- 一個處理時間的函式庫 -->
+    <script src="lib/exporting.js"></script>                  
+
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>   
+</head>
+
+<body ng-controller="rtwAppCtrl">
+    <h3>Chat Room</h3>
+
+    <form>
+        Mqtt Host/Port: <br />
+        <input type="text" ng-model="vm.mqtt_host" /> <input type="text" ng-model="vm.mqtt_port" /> <br /><br />
+        User Name: <br />
+        <input type="text" ng-model="vm.user_id" /><br /><br />
+
+        Create Chat Room: <br />
+        <input type="text" ng-model="vm.chat_room_name" ng-show="vm.is_connected" size="30" />
+        <input type="button" value="Create" ng-click="action.create_chat_room()" ng-show="vm.is_connected" />
+        <br />
+
+        Message: <br />
+        <input type="text" ng-model="vm.message" ng-show="vm.is_connected" />
+        <input type="button" value="Send" ng-click="action.send_message()" ng-show="vm.is_connected" /> <br /><br />
+
+
+        Joined Chat Room: {{vm.joined_room}}<br />
+        <input type="button" value="Exit Chat Room" ng-click="action.unsubscribe_topic()" ng-show="vm.is_connected && vm.is_subscribed" /> <br /><br />
+        <input type="button" value="Connect" ng-click="action.connect_mqtt()" ng-show="!vm.is_connected" />
+        <input type="button" value="Disconnect" ng-click="action.disconnect_mqtt()" ng-show="vm.is_connected" />
+    </form>
+
+    <br />
+    <h4>已上線的使用者</h4>
+    <span ng-repeat="online_user in vm.online_users" class="text-danger"><a href="" ng-click="action.build_private_chart_topic(online_user)"><i class="fa fa-bar-chart-o"></i> {{online_user}}</a> </span>
+
+    <h4>已建立的聊天室</h4>
+    <span ng-repeat="online_room in vm.online_rooms" class="text-danger"><a href="" ng-click="action.join_chat_room(online_room)"><i class="fa fa-bar-chart-o"></i> {{online_room}}</a> </span>
+
+    <h4>即時上線人數圖表</h4>
+    <div style="width: 400px; height: 400px; margin: 0 auto">
+        <highchart config="chartConfig"></highchart>
+    </div>    
+
+    <h4>己訂閱的主題</h4>
+    <table class="table-bordered">
+        <tr>
+            <th> Topic </th>
+            <th> Action </th>
+        </tr>
+        <tr ng-repeat="subscribed_topic in vm.subscribed_topics">
+            <td>{{subscribed_topic}}</td>
+            <td><input type="button" value="Unsubscribe" ng-click="action.unsubscribe_topic(subscribed_topic)" /></td>
+        </tr>
+    </table>
+
+    <h4>收到的訊息</h4>
+    <table class="table-bordered">
+        <tr>
+            <th> Topic </th>
+            <th> Retained </th>
+            <th> Qos</th>
+            <th> Message </th>
+            <th> Timestamp </th>
+        </tr>
+        <tr ng-repeat="inbound_message in vm.inbound_messages">
+            <td>{{inbound_message.topic}} </td>
+            <td>{{inbound_message.retained}} </td>
+            <td>{{inbound_message.qos}}</td>
+            <td>{{inbound_message.payload}} </td>
+            <td>{{inbound_message.eventdt}} </td>
+        </tr>
+    </table>
+
+</body>
+</html>
