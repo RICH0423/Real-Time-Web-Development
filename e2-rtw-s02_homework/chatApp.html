@@ -38,8 +38,7 @@
 
         Message: <br />
         <input type="text" ng-model="vm.message" ng-show="vm.is_connected" />
-        <input type="button" value="Send" ng-click="action.send_message()" ng-show="vm.is_connected" /> <br /><br />
-
+        <input type="button" value="Send" ng-click="action.send_message()" ng-show="vm.is_connected" /> <br />
 
         Joined Chat Room: {{vm.joined_room}}<br />
         <input type="button" value="Exit Chat Room" ng-click="action.unsubscribe_topic()" ng-show="vm.is_connected && vm.is_subscribed" /> <br /><br />
